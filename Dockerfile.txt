@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+
+    environment {
+        KEY_PATH = "/var/lib/jenkins/ubuntu.pem"
+    }
+
+    stages {
+
+        stage('Clone') {
+            steps {
+                git 'https://github.com/Syed2410/musthu.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t myapp .'
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                sh 'docker push your-dockerhub/myapp'
+            }
+        }
+
+        stage('Deploy to AWS') {
+            steps {
+                sh 'kubectl apply -f k8s/aws/'
+            }
+        }
+
+        
+        }
+    }
+}
